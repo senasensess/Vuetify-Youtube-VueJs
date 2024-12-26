@@ -1,32 +1,167 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
-  </div>
+  <v-app>
+    <v-navigation-drawer v-model="drawer" app clipped flating temporary>
+      <v-list dense>
+        <v-row class="ma-2 mb-3">
+          <v-icon class="mx-4" large>mdi-video</v-icon>
+          <v-toolbar-title class="align-center">
+            <span class="title">RotadaHayat</span>
+          </v-toolbar-title>
+        </v-row>
+
+        <v-list-item v-for="item in items" :key="item.icon" link>
+          <v-link-item-actions>
+            <v-icon>
+              {{ item.icon }}
+            </v-icon>
+          </v-link-item-actions>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ item.text }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar app clipped-left>
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
+      <v-icon class="mx-4" large>mdi-video</v-icon>
+      <v-toolbar-title class="align-center">
+        <span class="title">RotadaHayat</span>
+      </v-toolbar-title>
+      <v-spacer />
+      <v-text-field
+        class="mt-6"
+        placeholder="Ara...."
+        solo
+        single-line
+        append-icon="mdi-magnify"
+        color="white"
+      />
+      <v-spacer />
+      <v-btn class="ml-0" icon>
+        <v-icon>mdi-apps</v-icon>
+      </v-btn>
+      <v-btn class="ma-2" icon>
+        <v-icon>mdi-bell</v-icon>
+      </v-btn>
+      <div>
+        <v-menu
+          v-model="menu"
+          :close-on-content-click="false"
+          :nudge-witdh="250"
+          offset-x
+        >
+          <template v-slot:activator="{ on }">
+            <v-avatar size="40">
+              <img
+                v-on="on"
+                src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png"
+                alt="YouTube Icon"
+                width="50"
+                height="50"
+              />
+            </v-avatar>
+          </template>
+          <v-card>
+            <v-list>
+              <v-list-item>
+                <v-list-item-avatar></v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title> Sena Şenses </v-list-item-title>
+                  <v-list-item-subtitle>Rotada Hayat</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+            <v-divider />
+            <v-list>
+              <v-list-item>
+                <v-list-item-action>
+                  <v-icon>mdi-cog</v-icon>
+                </v-list-item-action>
+                <v-list-item-title>Ayarlar</v-list-item-title>
+              </v-list-item>
+            </v-list>
+
+            <v-list>
+              <v-list-item>
+                <v-list-item-action>
+                  <v-switch v-model="theme" color="gray" />
+                </v-list-item-action>
+                <v-list-item-title>Karanlık Tema</v-list-item-title>
+              </v-list-item>
+            </v-list>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn color="primary" text @click="menu = false">
+                Çıkış Yap
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+      </div>
+    </v-app-bar>
+    <v-content>
+      <v-container>
+        <v-row class="mb-4">
+          <v-col
+            sm="6"
+            md="4"
+            lg="3"
+            xl="2"
+            v-for="(item, index) in 200"
+            :key="index"
+          >
+            <v-card>
+              <v-img
+                height="200px"
+                :src="`https://picsum.photos/500/300?image=${index + 1}`"
+                :lazy-src="`https://picsum.photos/10/6?image=${index + 1}`"
+              />
+              <v-card-subtitle class=""> Number {{ item }} </v-card-subtitle>
+              <v-card-text class="text--primary"
+                ><div>Başlık Alanı</div>
+                <div>Başlık İçeriği</div>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="green" text>Kaydet</v-btn>
+                <v-btn color="primary" text>Paylaş</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+export default {
+  name: "App",
 
-nav {
-  padding: 30px;
-}
+  data: () => ({
+    //
+    items: [
+      { icon: "mdi-home page", text: "Ana Sayfa" },
+      { icon: "mdi-trending-up", text: "Popüler İçerik" },
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+      { icon: "mdi-youtube-subscription", text: "Abonelik" },
+      { icon: "mdi-history", text: "Geçmiş" },
 
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+      { icon: "mdi-playlist-play", text: "Oynatma Listeleri" },
+      { icon: "mdi-clock", text: "Daha Sonra İzle" },
+      { icon: "mdi-thumb-up", text: "Beğendiğim Videolar" },
+    ],
+
+    drawer: false,
+    menu: false,
+    theme: false,
+  }),
+  watch: {
+    theme: function (next) {
+      this.$vuetify.theme.dark = next;
+    },
+  },
+};
+</script>
